@@ -26,7 +26,7 @@ export const RegisterApi = createAsyncThunk(
         email,
         password,
       });
-      console.log(response);
+      window.localStorage.setItem("user", JSON.stringify(response.data.data));
 
       return response.data;
     } catch (error) {
