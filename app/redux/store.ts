@@ -2,12 +2,15 @@ import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./slices/auth_slice";
 import departmentSlice from "./slices/department_slice";
 import test_slice from "./slices/test_slice";
+import sub_test_slice from "./slices/sub_test_slice";
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     department:departmentSlice,
-    test:test_slice
+    test:test_slice,
+    subTest:sub_test_slice
+
   },
 });
 

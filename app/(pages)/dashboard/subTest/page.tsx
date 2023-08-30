@@ -4,9 +4,9 @@ import { AddTestModal } from "@/app/(pages)/dashboard/test/components/addTestMod
 import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import OpenPostDepartmentModalButton from "./components/openPostDepartmentModalButton";
-import TestDataTable from "./components/testTable";
 import { testActions } from "@/app/redux/slices/test_slice";
+import { AddSubTestModal } from "./components/addSubTestModal";
+import OpenPostSubTestModalButton from "./components/openPostDepartmentModalButton";
 
 function department({ searchParams }: any) {
   const dispatch = useDispatch();
@@ -24,10 +24,9 @@ function department({ searchParams }: any) {
 
   return (
     <div className="w-full p-10 flex flex-col  items-end">
-      <AddTestModal />
-      <OpenPostDepartmentModalButton />
-      <TestDataTable page={searchParams.page} />
-      {/* <DepartmentDataTable page={searchParams.page} /> */}
+      <AddSubTestModal />
+      <OpenPostSubTestModalButton />
+      {/* <TestDataTable page={searchParams.page} /> */}
     </div>
   );
 }

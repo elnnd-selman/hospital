@@ -13,16 +13,16 @@ export async function GET(req: NextRequest) {
   if (!page) {
     page = 1;
   }
-  const departments = await DepartmentModel.paginate(
+  const tests = await TestModelPaginate.paginate(
     {},
     {
       page: page,
       limit: 10,
     }
   );
-  console.log("departments:", departments);
+  console.log("tests:", tests);
 
-  return NextResponse.json({ staus: 200, data: departments });
+  return NextResponse.json({ staus: 200, data: tests });
 }
 
 ///POST
@@ -41,8 +41,10 @@ export async function POST(request: NextRequest) {
 
   try {
     const testSaved = await test.save();
-    console.log(testSaved);
-
+    await DepartmentModel.findByIdAndUpdate(
+      { _id: department },
+      { $push: { children: testSaved._id } }
+    );
     return NextResponse.json(
       { status: true, data: testSaved },
       {
@@ -50,8 +52,6 @@ export async function POST(request: NextRequest) {
       }
     );
   } catch (error) {
-    console.log(error);
-
     return NextResponse.json(
       { status: false, data: error },
       {
@@ -71,11 +71,11 @@ export async function PATCH(request: NextRequest) {
   });
 
   try {
-    const departmentSaved = await department.save();
-    console.log(departmentSaved);
+    const testsaved = await department.save();
+    console.log(testsaved);
 
     return NextResponse.json(
-      { status: true, data: departmentSaved },
+      { status: true, data: testsaved },
       {
         status: 200,
       }

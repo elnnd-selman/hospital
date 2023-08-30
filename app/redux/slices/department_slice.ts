@@ -7,7 +7,7 @@ interface departmentInterface {
   postDepartmentIsLoading: boolean;
   addDepartmentModalIsVisible: boolean;
   getDepartmentsLoading: boolean;
-  department: Object;
+  department: any;
   filter: string;
 }
 
@@ -17,7 +17,7 @@ const initialState: departmentInterface = {
   getDepartmentsLoading: false,
   addDepartmentModalIsVisible: false,
   filter: "",
-  department: [],
+  department: {},
 };
 
 const departmentSlice = createSlice({
@@ -37,9 +37,22 @@ const departmentSlice = createSlice({
       state.department = action.payload;
       console.log(state.department);
     },
-    filterHandle:(state,action)=>{
-      state.filter=action.payload
-    }
+    filterHandle: (state, action) => {
+      state.filter = action.payload;
+    },
+    removeDepartmentFromDepartments: (state, action) => {
+      const deps = current(state.department);
+      console.log("DEPS", deps);
+      state.department.docs = deps.docs.filter(
+        (dep: any) => dep._id != action.payload
+      );
+    },
+
+    addDepartmentFromDepartments: (state, action) => {
+      const deps = current(state.department);
+      console.log("DEPS", deps);
+      state.department.docs = deps.docs.push(action.payload);
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(PostDepartmentApi.pending, (state, action) => {
@@ -47,16 +60,16 @@ const departmentSlice = createSlice({
       // Add user to the state array
     });
     builder.addCase(PostDepartmentApi.fulfilled, (state, action: any) => {
-      // state.department.push(action.payload.data);
-
+      const deps = current(state.department);
+      const oldState = { ...deps };
+      oldState.docs = [...oldState.docs, action.payload.data];
+      state.department = oldState;
       state.postDepartmentIsLoading = false;
-
-      // Add user to the state array
     });
 
     builder.addCase(PostDepartmentApi.rejected, (state, action: any) => {
       // state.department.push(action.payload.data);
-console.log(action);
+      console.log(action);
 
       state.postDepartmentIsLoading = false;
 

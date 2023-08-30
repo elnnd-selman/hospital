@@ -6,9 +6,11 @@ import { PostTestApi } from "../apis/test_apis";
 
 interface testInterface {
   department: string;
+  test: string;
+
   name: string;
   postTestIsLoading: boolean;
-  addTestModalIsVisible: boolean;
+  addSubTestModalIsVisible: boolean;
   getTestsLoading: boolean;
   filter: string;
   type: string;
@@ -25,10 +27,12 @@ interface testInterface {
 const initialState: testInterface = {
   tests: [],
   department: "",
+  test: "",
+
   name: "",
   postTestIsLoading: false,
   getTestsLoading: false,
-  addTestModalIsVisible: false,
+  addSubTestModalIsVisible: false,
   filter: "",
   type: "",
   text: "",
@@ -40,20 +44,23 @@ const initialState: testInterface = {
   select: [],
 };
 
-const testSlice = createSlice({
+const subTestSlice = createSlice({
   name: "test",
 
   initialState,
   reducers: {
     getTests: (state, action) => {
       console.log(action.payload);
-      
+
       state.tests = action.payload;
     },
 
     setDepartment: (state, action) => {
       console.log(action.payload);
       state.department = action.payload;
+    },
+    setTest:(state, action) =>{
+      state.test = action.payload;
     },
     setName: (state, action) => {
       console.log(action.payload);
@@ -97,7 +104,7 @@ const testSlice = createSlice({
     addTestVisibilityHandle: (state, action) => {
       console.log(action.payload);
 
-      state.addTestModalIsVisible = action.payload;
+      state.addSubTestModalIsVisible = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -124,5 +131,5 @@ const testSlice = createSlice({
   },
 });
 
-export const testActions = testSlice.actions;
-export default testSlice.reducer;
+export const subTestActions = subTestSlice.actions;
+export default subTestSlice.reducer;
