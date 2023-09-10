@@ -3,16 +3,22 @@ import DepartmentModel from "@/app/models/department_model";
 import { NextRequest, NextResponse } from "next/server";
 
 //GET
+
 export async function GET(req: NextRequest) {
   await connectDB();
+
   const url = new URL(req.url);
-
   let page: any = url.searchParams.get("page");
-
-  if (!page) {
-    page = 1;
+  let id: any = url.searchParams.get("id");
+  let departments;
+  if (id) {
+    console.log("ID", id);
+    departments = await DepartmentModel.findById(id);
+    return NextResponse.json({ staus: 200, data: departments });
   }
-  const departments = await DepartmentModel.paginate(
+
+  page = page ?? 1;
+  departments = await DepartmentModel.paginate(
     {},
     {
       page: page,
@@ -24,8 +30,8 @@ export async function GET(req: NextRequest) {
 }
 
 ///POST
-export async function POST(request: NextRequest) {
-  const res = await request.json();
+export async function POST(req: NextRequest) {
+  const res = await req.json();
   console.log(res);
   const { name, userId } = res;
   await connectDB();
@@ -57,21 +63,25 @@ export async function POST(request: NextRequest) {
 }
 
 ///UPDATE
-export async function PATCH(request: NextRequest) {
-  const res = await request.json();
+export async function PATCH(req: NextRequest) {
+  const res = await req.json();
+  const url = new URL(req.url);
+
+  let id: any = url.searchParams.get("id");
+
   const { name, userId } = res;
   await connectDB();
-  const department = new DepartmentModel({
-    name,
-    user: userId,
-  });
 
   try {
-    const departmentSaved = await department.save();
-    console.log(departmentSaved);
+    const res = await DepartmentModel.findOneAndUpdate(
+      { _id: id },
+      { name: name },
+      { new: true }
+    );
+    console.log(res);
 
     return NextResponse.json(
-      { status: true, data: departmentSaved },
+      { status: true, data: res },
       {
         status: 200,
       }
@@ -91,13 +101,13 @@ export async function PATCH(request: NextRequest) {
 ///DELETE
 export async function DELETE(req: NextRequest) {
   const url = new URL(req.url);
-  const departmentId: string = url.searchParams.get("departmentId")!;
-  console.log(departmentId);
-  
+  const id: string = url.searchParams.get("id")!;
+  console.log(id);
+
   await connectDB();
   try {
     const departmentDeleted = await DepartmentModel.findOneAndDelete({
-      _id: departmentId,
+      _id: id,
     });
 
     return NextResponse.json(

@@ -29,10 +29,10 @@ export async function GET(req: NextRequest) {
 export async function POST(request: NextRequest) {
   const res = await request.json();
   console.log(res);
-  const { department, name, userId, type, data } = res;
+  const { parentId, name, userId, type, data } = res;
   await connectDB();
   const test = new TestModelPaginate({
-    department,
+    // parentId,
     name,
     user: userId,
     type,
@@ -41,10 +41,12 @@ export async function POST(request: NextRequest) {
 
   try {
     const testSaved = await test.save();
-    await DepartmentModel.findByIdAndUpdate(
-      { _id: department },
-      { $push: { children: testSaved._id } }
-    );
+    // await DepartmentModel.findByIdAndUpdate(
+    //   { _id: parentId },
+    //   { $push: { children: testSaved._id } }
+    // );
+    console.log(testSaved);
+    
     return NextResponse.json(
       { status: true, data: testSaved },
       {
@@ -52,6 +54,8 @@ export async function POST(request: NextRequest) {
       }
     );
   } catch (error) {
+    console.log(error);
+    
     return NextResponse.json(
       { status: false, data: error },
       {

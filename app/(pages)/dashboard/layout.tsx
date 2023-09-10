@@ -1,11 +1,13 @@
-import { Sidebar } from "@/app/components/sidebar";
+import { SideBar } from "@/app/components/sideBar";
+import React from "react";
 
-export default function layout({ children }: { children: React.ReactNode }) {
+function layout({ children }: { children: React.ReactNode }) {
   return (
-    <>
-      <div className="flex">
-        <Sidebar /> {children}
-      </div>
-    </>
+    <div className="flex">
+      <SideBar />
+      {children}
+    </div>
   );
 }
+
+export default layout;

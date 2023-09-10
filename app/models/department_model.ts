@@ -1,4 +1,10 @@
-import mongoose, { Document, Mongoose, ObjectId, Schema, SchemaDefinitionProperty } from "mongoose";
+import mongoose, {
+  Document,
+  Mongoose,
+  ObjectId,
+  Schema,
+  SchemaDefinitionProperty,
+} from "mongoose";
 import mongoosePaginate from "mongoose-paginate-v2";
 export interface DepartmentDocumentModel extends Document {
   name: string;
@@ -12,7 +18,7 @@ const DepartmentSchema = new Schema<DepartmentDocumentModel>(
     user: {
       type: mongoose.Types.ObjectId,
       ref: "user",
-      required: true,
+      required: false,
     },
     children: [],
   },
@@ -20,12 +26,10 @@ const DepartmentSchema = new Schema<DepartmentDocumentModel>(
 );
 DepartmentSchema.plugin(mongoosePaginate);
 
-
-
-
 // create the paginated model
 const DepartmentModelPaginate =
-  (mongoose.models.department as mongoose.PaginateModel<DepartmentDocumentModel>) ||
+  (mongoose.models
+    .department as mongoose.PaginateModel<DepartmentDocumentModel>) ||
   mongoose.model<DepartmentDocumentModel>("department", DepartmentSchema);
 
 export default DepartmentModelPaginate;

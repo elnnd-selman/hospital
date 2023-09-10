@@ -12,13 +12,13 @@ export interface TestDocumentModel extends Document {
   user: SchemaDefinitionProperty<ObjectId>;
   type: string;
   data: any;
-  department: SchemaDefinitionProperty<ObjectId>;
+  parentId: SchemaDefinitionProperty<ObjectId>;
 }
 
 const TestSchema = new Schema<TestDocumentModel>(
   {
     name: { type: String, required: true },
-    department: { type: mongoose.Types.ObjectId, required: true },
+    parentId: { type: mongoose.Types.ObjectId, required: false },
     type: {
       type: String,
       required: true,
@@ -27,7 +27,7 @@ const TestSchema = new Schema<TestDocumentModel>(
     user: {
       type: mongoose.Types.ObjectId,
       ref: "user",
-      required: true,
+      required: false,
     },
     data: mongoose.SchemaTypes.Mixed,
   },
