@@ -1,5 +1,5 @@
 import { closeDB, connectDB } from "@/app/config/mongoose_config";
-import UserModel from "@/app/models/user_model";
+import UserModel from "@/app/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
@@ -8,7 +8,6 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   const res = await request.json();
-  console.log(res);
   const { name, password, email } = res;
   await connectDB();
   const useModel = new UserModel({

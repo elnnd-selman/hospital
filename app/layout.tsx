@@ -1,9 +1,13 @@
-import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Providers from "./redux/provider";
 import { Suspense } from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./globals.css";
 import Loading from "./loading";
+import Providers from "./redux/provider";
+import { SideBar } from "./layouts/sideBar";
+import { NavBar } from "./layouts/navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,8 +26,12 @@ export default function RootLayout({
       <body className={inter.className}>
         <Suspense fallback={<Loading />}>
           <Providers>
-          
-            <div> {children} </div>
+            <ToastContainer />
+
+            <div>
+              <NavBar />
+              {children}
+            </div>
           </Providers>
         </Suspense>
       </body>

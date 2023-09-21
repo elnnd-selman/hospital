@@ -2,17 +2,49 @@ import { connectDB } from "@/app/config/mongoose_config";
 import DepartmentModel from "@/app/models/department_model";
 import { NextRequest, NextResponse } from "next/server";
 
-//GET
+const getAllDepartmentsWithTest = async () => {
+  return DepartmentModel.aggregate([
+    {
+      $lookup: {
+        from: "tests",
+        let: { departmentId: "$_id" },
+        pipeline: [
+          {
+            $match: {
+              $expr: { $eq: ["$parentId", "$$departmentId"] }
+            }
+          },
+          {
+            $lookup: {
+              from: "subtests",
+              localField: "_id",
+              foreignField: "testId",
+              as: "subTests"
+            }
+          }
+        ],
+        as: "tests"
+      }
+    }
+  ]);
+};
 
+//GET
 export async function GET(req: NextRequest) {
   await connectDB();
 
   const url = new URL(req.url);
+  let type: any = url.searchParams.get("type");
+  if (type == "departmentWithTests") {
+    return NextResponse.json({
+      staus: 200,
+      data: await getAllDepartmentsWithTest(),
+    });
+  }
   let page: any = url.searchParams.get("page");
   let id: any = url.searchParams.get("id");
   let departments;
   if (id) {
-    console.log("ID", id);
     departments = await DepartmentModel.findById(id);
     return NextResponse.json({ staus: 200, data: departments });
   }
@@ -32,7 +64,6 @@ export async function GET(req: NextRequest) {
 ///POST
 export async function POST(req: NextRequest) {
   const res = await req.json();
-  console.log(res);
   const { name, userId } = res;
   await connectDB();
   const department = new DepartmentModel({
@@ -42,7 +73,6 @@ export async function POST(req: NextRequest) {
 
   try {
     const departmentSaved = await department.save();
-    console.log(departmentSaved);
 
     return NextResponse.json(
       { status: true, data: departmentSaved },
@@ -78,7 +108,6 @@ export async function PATCH(req: NextRequest) {
       { name: name },
       { new: true }
     );
-    console.log(res);
 
     return NextResponse.json(
       { status: true, data: res },
@@ -102,7 +131,6 @@ export async function PATCH(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   const url = new URL(req.url);
   const id: string = url.searchParams.get("id")!;
-  console.log(id);
 
   await connectDB();
   try {

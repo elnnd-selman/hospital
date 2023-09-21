@@ -32,7 +32,9 @@ export function CreateDepartmentForm() {
           className="mt-6"
           fullWidth
           onClick={() => {
-            createDepartment({name});
+            const user = localStorage.getItem("user");
+
+            createDepartment({ name, userId: JSON.parse(user!)._id });
           }}
         >
           {isLoading ? "Creating..." : "Create"}

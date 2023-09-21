@@ -4,7 +4,6 @@ import * as React from "react";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 
 import { useRouter } from "next/navigation";
-import { ConfirmDialog } from "../dialog";
 import { useDeleteTestMutation } from "@/app/redux/apis/testApis";
 import { useGetSubTestsQuery } from "@/app/redux/apis/subTestApis";
 // import { PaginationComponent } from "../reusableComponents/paginationComponent";
@@ -54,7 +53,6 @@ export default function SubTestDataTable({ page }: { page: string }) {
   ];
   let rows: any;
   if (!isLoading && data) {
-    console.log("Lenght", data.data);
 
     rows = data.data.docs.map((department: Department) => {
       return {
@@ -86,7 +84,6 @@ export default function SubTestDataTable({ page }: { page: string }) {
             rowCount={data.data.totalDocs}
             onPaginationModelChange={(params) => {
               const page = params.page + 1;
-              console.log(page);
               router.push("/dashboard/department?page=" + page);
             }}
             // onFilterModelChange={handleFilterChange}

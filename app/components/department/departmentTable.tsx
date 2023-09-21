@@ -8,7 +8,6 @@ import {
   useGetDepartmentsQuery,
 } from "@/app/redux/apis/departmentApis";
 import { useRouter } from "next/navigation";
-import { ConfirmDialog } from "../dialog";
 // import { PaginationComponent } from "../reusableComponents/paginationComponent";
 
 export default function DepartmentDataTable({ page }: { page: string }) {
@@ -56,7 +55,6 @@ export default function DepartmentDataTable({ page }: { page: string }) {
   ];
   let rows: any;
   if (!isLoading && data) {
-    console.log("Lenght", data.data);
 
     rows = data.data.docs.map((department: Department) => {
       return {
@@ -81,14 +79,11 @@ export default function DepartmentDataTable({ page }: { page: string }) {
             rows={rows}
             columns={columns}
             pagination
-            // onRowClick={(e) => {
-            //   console.log(e);
-            // }}
+           
             paginationMode="server"
             rowCount={data.data.totalDocs}
             onPaginationModelChange={(params) => {
               const page = params.page + 1;
-              console.log(page);
               router.push("/dashboard/department?page=" + page);
             }}
             // onFilterModelChange={handleFilterChange}

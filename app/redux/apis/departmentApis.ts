@@ -5,19 +5,23 @@ export const departmentApi = createApi({
   reducerPath: "departmentApi",
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000/api" }),
   endpoints: (builder) => ({
+    getDepartmentWithTests: builder.query({
+      query: () => `department?type=departmentWithTests`,
+    }),
     getDepartments: builder.query({
       query: ({ page }) => `department?page=${page ?? 1}`,
     }),
+
     getOneDepartment: builder.query({
       query: ({ id }) => `department?id=${id}`,
     }),
 
     createDepartment: builder.mutation({
-      query: ({ name }) => {
+      query: (data) => {
         return {
           url: `department`,
           method: "POST",
-          body: JSON.stringify({ name }),
+          body: JSON.stringify(data),
         };
       },
     }),
@@ -43,8 +47,9 @@ export const departmentApi = createApi({
 
 export const {
   useGetDepartmentsQuery,
+  useGetDepartmentWithTestsQuery,
   useCreateDepartmentMutation,
   useGetOneDepartmentQuery,
   useUpdateDepartmentMutation,
-  useDeleteDepartmentMutation
+  useDeleteDepartmentMutation,
 } = departmentApi;

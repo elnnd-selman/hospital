@@ -43,7 +43,6 @@ export function Update({ id }: { id: string }) {
                 crossOrigin={""}
                 value={name}
                 onChange={(e) => {
-                  console.log(e.target.value);
 
                   return setName(e.target.value);
                 }}

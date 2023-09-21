@@ -24,7 +24,6 @@ const departmentSlice = createSlice({
   initialState,
   reducers: {
     addDepartmentsToList: (state, action) => {
-      console.log("action", action.payload);
       const data = action.payload;
       if (data.status == 200) {
         state.department = data.docs;
@@ -32,7 +31,6 @@ const departmentSlice = createSlice({
     },
 
     setName: (state, action) => {
-      console.log(action.payload);
 
       state.name = action.payload;
     },
@@ -41,14 +39,12 @@ const departmentSlice = createSlice({
     },
     getDepartments: (state, action) => {
       state.department = action.payload;
-      console.log(state.department);
     },
     filterHandle: (state, action) => {
       state.filter = action.payload;
     },
     removeDepartmentFromDepartments: (state, action) => {
       const deps = current(state.department);
-      console.log("DEPS", deps);
       state.department.docs = deps.docs.filter(
         (dep: any) => dep._id != action.payload
       );
@@ -56,7 +52,6 @@ const departmentSlice = createSlice({
 
     addDepartmentFromDepartments: (state, action) => {
       const deps = current(state.department);
-      console.log("DEPS", deps);
       state.department.docs = deps.docs.push(action.payload);
     },
   },

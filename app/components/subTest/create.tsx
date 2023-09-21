@@ -1,4 +1,5 @@
 import { useCreateSubTestMutation } from "@/app/redux/apis/subTestApis";
+import { useGetTestsQuery } from "@/app/redux/apis/testApis";
 import {
   Button,
   Card,
@@ -15,17 +16,17 @@ import { useState } from "react";
 
 interface TestType {
   name: string;
-  parentId: string;
+  testId: string;
   type: string;
   user: string;
   data: any;
 }
 export function Create() {
   const [createTest, { isLoading }] = useCreateSubTestMutation();
-
+const {data,isLoading:getTestIsLoading}= useGetTestsQuery({page:0})
   const [form, setFormData] = useState<TestType>({
     name: "",
-    parentId: "",
+    testId: "",
     type: "",
     user: "",
     data: null,
@@ -91,7 +92,30 @@ export function Create() {
       </Typography>
 
       <div className="mt-8  w-[calc(100%/2)] ">
-        
+      {getTestIsLoading ? (
+          "Loading..."
+        ) : (
+          <Select
+            label="Select Type"
+            onChange={(value) => {
+              handleChange({
+                target: {
+                  name: "testId",
+                  value,
+                },
+              });
+            }}
+          >
+            {data.data.docs.map((doc: any) => {
+              return (
+                <Option key={doc._id} value={doc._id}>
+                  {doc.name}
+                </Option>
+              );
+            })}
+          </Select>
+        )}
+
         <Input
           size="lg"
           label="Name"
@@ -253,8 +277,9 @@ export function Create() {
           fullWidth
           onClick={() => {
             console.log(form);
+            const user = localStorage.getItem("user");
 
-            createTest(form);
+            createTest({ ...form, userId: JSON.parse(user!)._id });
           }}
         >
           {isLoading ? "Creating..." : "Create"}

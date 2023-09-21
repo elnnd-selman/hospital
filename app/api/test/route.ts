@@ -1,7 +1,7 @@
 import { connectDB } from "@/app/config/mongoose_config";
 import DepartmentModel from "@/app/models/department_model";
 import TestModelPaginate from "@/app/models/testModel";
-import UserModel from "@/app/models/user_model";
+import UserModel from "@/app/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -16,11 +16,10 @@ export async function GET(req: NextRequest) {
   const tests = await TestModelPaginate.paginate(
     {},
     {
-      page: page,
-      limit: 10,
+      page: page==0?1:page,
+      limit: page==0?200:10
     }
   );
-  console.log("tests:", tests);
 
   return NextResponse.json({ staus: 200, data: tests });
 }
@@ -28,11 +27,10 @@ export async function GET(req: NextRequest) {
 ///POST
 export async function POST(request: NextRequest) {
   const res = await request.json();
-  console.log(res);
   const { parentId, name, userId, type, data } = res;
   await connectDB();
   const test = new TestModelPaginate({
-    // parentId,
+    parentId,
     name,
     user: userId,
     type,
@@ -45,7 +43,6 @@ export async function POST(request: NextRequest) {
     //   { _id: parentId },
     //   { $push: { children: testSaved._id } }
     // );
-    console.log(testSaved);
     
     return NextResponse.json(
       { status: true, data: testSaved },
@@ -76,7 +73,6 @@ export async function PATCH(request: NextRequest) {
 
   try {
     const testsaved = await department.save();
-    console.log(testsaved);
 
     return NextResponse.json(
       { status: true, data: testsaved },

@@ -1,7 +1,7 @@
 import { connectDB } from "@/app/config/mongoose_config";
 import DepartmentModel from "@/app/models/department_model";
 import SubTestModelPaginate from "@/app/models/subTestModel";
-import UserModel from "@/app/models/user_model";
+import UserModel from "@/app/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -13,14 +13,13 @@ export async function GET(req: NextRequest) {
   if (!page) {
     page = 1;
   }
-  const tests = await SubTestModelPaginate.paginate(
+  const tests = await SubTestModelPaginate.paginate (
     {},
     {
       page: page,
       limit: 10,
     }
   );
-  console.log("tests:", tests);
 
   return NextResponse.json({ staus: 200, data: tests });
 }
@@ -28,11 +27,10 @@ export async function GET(req: NextRequest) {
 ///POST
 export async function POST(request: NextRequest) {
   const res = await request.json();
-  console.log(res);
-  const { department, test, name, userId, type, data } = res;
+  const { testId, test, name, userId, type, data } = res;
   await connectDB();
   const subTest = new SubTestModelPaginate({
-    department,
+    testId,
     test,
     name,
     user: userId,
@@ -42,7 +40,6 @@ export async function POST(request: NextRequest) {
 
   try {
     const subTestSaved = await subTest.save();
-    console.log(subTestSaved);
 
     return NextResponse.json(
       { status: true, data: subTestSaved },
@@ -73,7 +70,6 @@ export async function PATCH(request: NextRequest) {
 
   try {
     const subTestsaved = await department.save();
-    console.log(subTestsaved);
 
     return NextResponse.json(
       { status: true, data: subTestsaved },

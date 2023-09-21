@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { RegisterApi } from "../apis/auth_apis";
 
 interface authStates {
   email: string;
@@ -20,17 +19,14 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setName: (state, action) => {
-      console.log(action.payload);
 
       state.name = action.payload;
     },
     setEmail: (state, action) => {
-      console.log(action.payload);
 
       state.email = action.payload;
     },
     setPassword: (state, action) => {
-      console.log(action.payload);
 
       state.password = action.payload;
     },
@@ -42,17 +38,7 @@ const authSlice = createSlice({
       }, 2000);
     },
   },
-  extraReducers: (builder) => {
-    builder.addCase(RegisterApi.pending, (state, action) => {
-      state.registerLoading = true;
-      // Add user to the state array
-    });
-    builder.addCase(RegisterApi.fulfilled, (state, action) => {
-      state.registerLoading = false;
-
-      // Add user to the state array
-    });
-  },
+  
 });
 
 export const authActions = authSlice.actions;

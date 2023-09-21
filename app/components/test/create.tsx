@@ -137,8 +137,6 @@ export function Create() {
             setKeyInput("");
             setValueInput("");
             setDataToNull();
-            console.log(form.data);
-
             handleChange({
               target: {
                 name: "type",
@@ -281,8 +279,6 @@ export function Create() {
           className="mt-6"
           fullWidth
           onClick={() => {
-            console.log(form);
-
             createTest(form);
           }}
         >

@@ -13,14 +13,16 @@ export interface TestDocumentModel extends Document {
   type: string;
   data: any;
   department: SchemaDefinitionProperty<ObjectId>;
-  test: SchemaDefinitionProperty<ObjectId>;
+  parentId: SchemaDefinitionProperty<ObjectId>;
+
+  testId: SchemaDefinitionProperty<ObjectId>;
 }
 
 const SubTestSchema = new Schema<TestDocumentModel>(
   {
     name: { type: String, required: true },
-    department: { type: mongoose.Types.ObjectId, required: true },
-    test: { type: mongoose.Types.ObjectId, required: true },
+    parentId: { type: mongoose.Types.ObjectId, required: false },
+    testId: { type: mongoose.Types.ObjectId, required: true },
 
     type: {
       type: String,
