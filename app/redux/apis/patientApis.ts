@@ -20,7 +20,18 @@ export const patientApi = createApi({
       },
     }),
 
+    addResultPatient: builder.mutation({
+      query: (data) => {
+      
+        return {
+          url: `patient/add-result`,
+          method: "POST",
+          body: JSON.stringify(data),
+        };
+      },
+    }),
+
   }),
 });
 
-export const { useAddPatientMutation ,useGetPationtByDepartmentIdQuery} = patientApi;
+export const { useAddPatientMutation ,useGetPationtByDepartmentIdQuery,useAddResultPatientMutation} = patientApi;

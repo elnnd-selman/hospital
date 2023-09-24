@@ -31,7 +31,11 @@ import {
   PuzzlePieceIcon,
   GiftIcon,
 } from "@heroicons/react/24/outline";
- 
+import Link from "next/link";
+import useLogin from "../hooks/useLogin";
+import { useRouter } from "next/navigation";
+import useRolePermission from "../hooks/usePermission";
+
 const colors = {
   blue: "bg-blue-50 text-blue-500",
   orange: "bg-orange-50 text-orange-500",
@@ -42,7 +46,7 @@ const colors = {
   cyan: "bg-cyan-50 text-cyan-500",
   pink: "bg-pink-50 text-pink-500",
 };
- 
+
 const navListMenuItems = [
   {
     color: "blue",
@@ -104,11 +108,11 @@ const navListMenuItems = [
     description: "List of all our open-source projects, it's all free.",
   },
 ];
- 
+
 function NavListMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
- 
+
   const renderItems = navListMenuItems.map(
     ({ icon, title, description, color }, key) => (
       <a href="#" key={key}>
@@ -135,7 +139,7 @@ function NavListMenu() {
       </a>
     )
   );
- 
+
   return (
     <React.Fragment>
       <Menu
@@ -156,15 +160,13 @@ function NavListMenu() {
               Resources
               <ChevronDownIcon
                 strokeWidth={2.5}
-                className={`hidden h-3 w-3 transition-transform lg:block ${
-                  isMenuOpen ? "rotate-180" : ""
-                }`}
+                className={`hidden h-3 w-3 transition-transform lg:block ${isMenuOpen ? "rotate-180" : ""
+                  }`}
               />
               <ChevronDownIcon
                 strokeWidth={2.5}
-                className={`block h-3 w-3 transition-transform lg:hidden ${
-                  isMobileMenuOpen ? "rotate-180" : ""
-                }`}
+                className={`block h-3 w-3 transition-transform lg:hidden ${isMobileMenuOpen ? "rotate-180" : ""
+                  }`}
               />
             </ListItem>
           </Typography>
@@ -179,8 +181,9 @@ function NavListMenu() {
     </React.Fragment>
   );
 }
- 
+
 function NavList() {
+
   return (
     <List className="mt-4 mb-6 p-0 lg:mt-0 lg:mb-0 lg:flex-row lg:p-1">
       <Typography
@@ -191,39 +194,31 @@ function NavList() {
         className="font-normal"
       >
         <ListItem className="flex items-center gap-2 py-2 pr-4">
-          <CubeTransparentIcon className="h-[18px] w-[18px]" />
-          Blocks
+          {useRolePermission({
+            role: "superAdmin",
+            children: <h1>Hey</h1>
+          })}
+
         </ListItem>
       </Typography>
-      <NavListMenu />
-      <Typography
-        as="a"
-        href="#"
-        variant="small"
-        color="blue-gray"
-        className="font-normal"
-      >
-        <ListItem className="flex items-center gap-2 py-2 pr-4">
-          <UserCircleIcon className="h-[18px] w-[18px]" />
-          Account
-        </ListItem>
-      </Typography>
+
     </List>
   );
 }
- 
+
 export function NavBar() {
+  const { user, logout } = useLogin()
   const [openNav, setOpenNav] = React.useState(false);
- 
+  const router = useRouter();
   React.useEffect(() => {
     window.addEventListener(
       "resize",
       () => window.innerWidth >= 960 && setOpenNav(false)
     );
   }, []);
- 
+
   return (
-    <Navbar className="mx-auto max-w-screen-xl px-4 py-2">
+    <Navbar className="mx-auto max-w-screen-xl px-4 py-2 h-16">
       <div className="flex items-center justify-between text-blue-gray-900">
         <Typography
           as="a"
@@ -231,18 +226,25 @@ export function NavBar() {
           variant="h6"
           className="mr-4 cursor-pointer py-1.5 lg:ml-2"
         >
-          Material Tailwind
+          MERGASOR HOSPITAL
         </Typography>
         <div className="hidden lg:block">
           <NavList />
         </div>
         <div className="hidden gap-2 lg:flex">
-          <Button variant="text" size="sm" color="blue-gray">
-            Sign In
-          </Button>
-          <Button variant="gradient" size="sm">
-            Sign Up
-          </Button>
+
+          {user ? <Button variant="gradient" size="sm" onClick={() => {
+            logout()
+
+            router.replace('/auth/login')
+          }}>
+
+            Log out
+          </Button> : <Button variant="gradient" size="sm">
+            <Link href={'/auth/login'} >
+              Sign In
+            </Link>
+          </Button>}
         </div>
         <IconButton
           variant="text"

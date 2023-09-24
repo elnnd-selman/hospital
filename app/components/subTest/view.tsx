@@ -5,33 +5,31 @@ import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 
 import { useRouter } from "next/navigation";
 import { useDeleteTestMutation } from "@/app/redux/apis/testApis";
-import { useGetSubTestsQuery } from "@/app/redux/apis/subTestApis";
+import { useDeleteSubTestMutation, useGetSubTestsQuery } from "@/app/redux/apis/subTestApis";
+import { CreateDepartmentDialog } from "./createDialog";
+import { Button } from "@material-tailwind/react";
+import moment from "moment";
 // import { PaginationComponent } from "../reusableComponents/paginationComponent";
 
 export default function SubTestDataTable({ page }: { page: string }) {
   const router = useRouter();
+  const [showCreateTestDialog, setShowCreateTestDialog] = React.useState(false)
+
   const { data, isLoading, refetch } = useGetSubTestsQuery({ page });
-  const [deleteDepartment, { isLoading: deleteDepartmentIsLoading }] =
-    useDeleteTestMutation();
+  const [deleteSubtest, { isLoading: deleteDepartmentIsLoading }] =
+  useDeleteSubTestMutation();
 
   const columns: GridColDef[] = [
     { field: "name", headerName: "Name", width: 130 },
-    { field: "children", headerName: "children", width: 130 },
+
+    { field: "type", headerName: "type", width: 200 },
     {
-      field: "edit",
-      headerName: " ---",
-      sortable: false,
-      width: 100,
-      renderCell: (params) => (
-        <button
-          onClick={() => {
-            router.push("/dashboard/department/update?id=" + params.row.id);
-          }}
-          className="rounded-md bg-blue-500 p-2 text-center text-white"
-        >
-          Edit
-        </button>
-      ),
+      field: "date", headerName: "date", width: 200, renderCell: (params: any) => (
+        <>
+          {
+            moment(params.date).format("DD-MM-YYYY : h:mm:ss a")
+          }</>
+      )
     },
     {
       field: "delete",
@@ -41,7 +39,7 @@ export default function SubTestDataTable({ page }: { page: string }) {
       renderCell: (params) => (
         <button
           onClick={async () => {
-            await deleteDepartment({ id: params.row.id });
+            await deleteSubtest({ id: params.row.id });
             refetch();
           }}
           className="rounded-md bg-red-500 p-2 text-center text-white"
@@ -54,10 +52,11 @@ export default function SubTestDataTable({ page }: { page: string }) {
   let rows: any;
   if (!isLoading && data) {
 
-    rows = data.data.docs.map((department: Department) => {
+    rows = data.data.docs.map((subTest: any) => {
       return {
-        id: department._id,
-        name: department.name,
+        id: subTest._id,
+        name: subTest.name,
+        type:subTest.type
       };
     });
   }
@@ -67,19 +66,19 @@ export default function SubTestDataTable({ page }: { page: string }) {
   }, []);
 
   return (
-    <>
+    <div className="mx-auto max-w-screen-xl px-4 py-2">
+        <CreateDepartmentDialog open={showCreateTestDialog} setOpenDialog={setShowCreateTestDialog} refetch={() => refetch()} />
+      <Button color="blue" className="my-2" onClick={() => setShowCreateTestDialog(true)}> Create</Button>
+
       {isLoading ? (
-        <h1> Departments is Loading</h1>
+        <h1> Sub tests is Loading</h1>
       ) : (
         <div style={{ height: 400, width: "100%" }}>
-          {rows.length}
           <DataGrid
             rows={rows}
             columns={columns}
             pagination
-            // onRowClick={(e) => {
-            //   console.log(e);
-            // }}
+          
             paginationMode="server"
             rowCount={data.data.totalDocs}
             onPaginationModelChange={(params) => {
@@ -99,6 +98,6 @@ export default function SubTestDataTable({ page }: { page: string }) {
           />
         </div>
       )}
-    </>
+    </div>
   );
 }

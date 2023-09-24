@@ -17,18 +17,40 @@ export async function GET(req: NextRequest) {
     console.log("HERE", departmentId);
 
     // Ensure the 'pendingTest' object exists before setting its '_id' property
-      options['pendingTest._id'] = departmentId;
-    
+    options["pendingTest._id"] = departmentId;
   }
   console.log(options);
-  
+
+  const genderCount = await PatientPatientModel.aggregate([
+    {
+      $group: {
+        _id: "$gender",
+        count: { $sum: 1 },
+      },
+    },
+  ]);
+  const ageDistribution = await PatientPatientModel.aggregate([
+    {
+      $group: {
+        _id: "$age",
+        count: { $sum: 1 },
+      },
+    },
+  ]);
   const patients = await PatientPatientModel.paginate(options, {
     page: page,
-    limit: 6,
+    limit: 100,
   });
   // const patients = await PatientPatientModel.find({});
 
-  return NextResponse.json({ data: patients });
+  return NextResponse.json({
+    data: {
+      status: true,
+      patients: patients,
+      genderCount,
+      ageDistribution,
+    },
+  });
 }
 
 export async function POST(request: NextRequest) {

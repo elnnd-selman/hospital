@@ -13,11 +13,13 @@ export async function GET(req: NextRequest) {
   if (!page) {
     page = 1;
   }
+
   const tests = await TestModelPaginate.paginate(
     {},
     {
-      page: page==0?1:page,
-      limit: page==0?200:10
+      page: page == 0 ? 1 : page,
+      limit: 10,
+      
     }
   );
 
@@ -43,7 +45,7 @@ export async function POST(request: NextRequest) {
     //   { _id: parentId },
     //   { $push: { children: testSaved._id } }
     // );
-    
+
     return NextResponse.json(
       { status: true, data: testSaved },
       {
@@ -52,7 +54,7 @@ export async function POST(request: NextRequest) {
     );
   } catch (error) {
     console.log(error);
-    
+
     return NextResponse.json(
       { status: false, data: error },
       {
@@ -83,6 +85,32 @@ export async function PATCH(request: NextRequest) {
   } catch (error) {
     console.log(error);
 
+    return NextResponse.json(
+      { status: false, data: error },
+      {
+        status: 400,
+      }
+    );
+  }
+}
+
+///DELETE
+export async function DELETE(req: NextRequest) {
+  const url = new URL(req.url);
+  const id: string = url.searchParams.get("id")!;
+
+  await connectDB();
+  try {
+    const testDeleted = await TestModelPaginate.findOneAndDelete({
+      _id: id,
+    });
+
+    return NextResponse.json(
+      { status: true, data: testDeleted },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.log(error);
     return NextResponse.json(
       { status: false, data: error },
       {

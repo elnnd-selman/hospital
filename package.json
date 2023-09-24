@@ -15,6 +15,7 @@
     "@material-tailwind/react": "^2.1.0",
     "@mui/material": "^5.14.5",
     "@mui/styled-engine-sc": "^5.12.0",
+    "@react-pdf/renderer": "^3.1.12",
     "@reduxjs/toolkit": "^1.9.5",
     "@types/mongoose": "^5.11.97",
     "@types/node": "20.5.0",
@@ -22,12 +23,16 @@
     "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.15",
     "axios": "^1.4.0",
+    "chart.js": "^4.4.0",
+    "html2pdf.js": "^0.9.0",
     "moment": "^2.29.4",
     "mongoose": "^7.4.3",
     "mongoose-paginate-v2": "^1.7.31",
     "next": "13.4.15",
+    "pdfmake": "^0.2.7",
     "postcss": "8.4.27",
     "react": "18.2.0",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.11.0",
     "react-redux": "^8.1.2",
@@ -35,6 +40,7 @@
     "styled-components": "^6.0.7",
     "tailwindcss": "3.3.3",
     "typescript": "5.1.6",
+    "xlsx": "^0.18.5",
     "yarn": "^1.22.19"
   }
 }

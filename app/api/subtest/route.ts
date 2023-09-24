@@ -88,3 +88,30 @@ export async function PATCH(request: NextRequest) {
     );
   }
 }
+
+
+///DELETE
+export async function DELETE(req: NextRequest) {
+  const url = new URL(req.url);
+  const id: string = url.searchParams.get("id")!;
+
+  await connectDB();
+  try {
+    const testDeleted = await SubTestModelPaginate.findOneAndDelete({
+      _id: id,
+    });
+
+    return NextResponse.json(
+      { status: true, data: testDeleted },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(
+      { status: false, data: error },
+      {
+        status: 400,
+      }
+    );
+  }
+}

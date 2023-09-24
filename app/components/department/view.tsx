@@ -8,33 +8,21 @@ import {
   useGetDepartmentsQuery,
 } from "@/app/redux/apis/departmentApis";
 import { useRouter } from "next/navigation";
+import { Button } from "@material-tailwind/react";
+import { CreateDialog } from "./createDialog";
+import { useState } from "react";
 // import { PaginationComponent } from "../reusableComponents/paginationComponent";
 
 export default function DepartmentDataTable({ page }: { page: string }) {
   const router = useRouter();
+  const [showCreateDepartmentDialog, setShowDeleteDepartmentDialog] = useState(false)
   const { data, isLoading, refetch } = useGetDepartmentsQuery({ page });
   const [deleteDepartment, { isLoading: deleteDepartmentIsLoading }] =
     useDeleteDepartmentMutation();
 
   const columns: GridColDef[] = [
     { field: "name", headerName: "Name", width: 130 },
-    { field: "children", headerName: "children", width: 130 },
-    {
-      field: "edit",
-      headerName: " ---",
-      sortable: false,
-      width: 100,
-      renderCell: (params) => (
-        <button
-          onClick={() => {
-            router.push("/dashboard/department/update?id=" + params.row.id);
-          }}
-          className="rounded-md bg-blue-500 p-2 text-center text-white"
-        >
-          Edit
-        </button>
-      ),
-    },
+    
     {
       field: "delete",
       headerName: " ---",
@@ -69,17 +57,20 @@ export default function DepartmentDataTable({ page }: { page: string }) {
   }, []);
 
   return (
-    <>
+    <div className="mx-auto max-w-screen-xl px-4 py-2">
+      <CreateDialog open={showCreateDepartmentDialog} setShowDeleteDepartmentDialog={setShowDeleteDepartmentDialog} refetch={()=>refetch()} />
+      <Button color="blue" className="my-2" onClick={()=>setShowDeleteDepartmentDialog(true)}> Create</Button>
+
       {isLoading ? (
         <h1> Departments is Loading</h1>
       ) : (
         <div style={{ height: 400, width: "100%" }}>
-          {rows.length}
+
           <DataGrid
             rows={rows}
             columns={columns}
             pagination
-           
+
             paginationMode="server"
             rowCount={data.data.totalDocs}
             onPaginationModelChange={(params) => {
@@ -99,6 +90,6 @@ export default function DepartmentDataTable({ page }: { page: string }) {
           />
         </div>
       )}
-    </>
+    </div>
   );
 }

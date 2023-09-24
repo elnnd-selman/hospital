@@ -6,6 +6,7 @@ import { testApi } from "./apis/testApis";
 import { subTestApi } from "./apis/subTestApis";
 import { authApi } from "./apis/authApis";
 import { patientApi } from "./apis/patientApis";
+import { inventoryApi } from "./apis/inventory";
 
 export const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ export const store = configureStore({
     [subTestApi.reducerPath]: subTestApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
     [patientApi.reducerPath]: patientApi.reducer,
+    [inventoryApi.reducerPath]: inventoryApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
@@ -23,6 +25,7 @@ export const store = configureStore({
       subTestApi.middleware,
       authApi.middleware,
       patientApi.middleware,
+      inventoryApi.middleware,
     ]),
 });
 
