@@ -33,7 +33,6 @@ export const data = {
 };
 
 export default function ChartAge({ age }: { age: any }) {
-    console.log(age);
 
 
     const labels = age.map((entry: any) => entry._id ? entry._id : 'NULL'.toString());

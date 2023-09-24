@@ -23,7 +23,6 @@ export function DepartmentTabs({
 }) {
   const { data: Deps, isLoading: getDepsIsLoading } =
     useGetDepartmentWithTestsQuery("");
-  console.log(Deps);
 
   return (
     <Card className=" w-full ">

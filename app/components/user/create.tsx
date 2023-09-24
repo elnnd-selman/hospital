@@ -124,13 +124,7 @@ export function Create() {
             fullWidth
             onClick={() => {
               userRegister(formData)
-                .unwrap()
-                .then((res) => {
-                  console.log(res);
-                })
-                .catch((error) => {
-                  console.log(error);
-                });
+               
             }}
           >
             {userRegisterIsLoading ? "Register..." : "Register"}

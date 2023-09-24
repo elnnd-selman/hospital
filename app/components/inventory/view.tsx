@@ -92,7 +92,6 @@ export default function ViewInventory({ page }: { page: string }) {
   ];
   let rows: any;
   if (!isLoading && data) {
-    console.log(data);
 
     rows = data.data.patients.docs.map((patient: any) => {
       let doneTestCount = patient.doneTest.reduce((acc: number, curr: any) => acc + curr.tests.length, 0);

@@ -14,12 +14,11 @@ export default function PrintViews({ page }: { page: string }) {
   const [showPdf, setShowPdf] = React.useState(false)
 
   const router = useRouter();
-  const { data, isLoading } =
-    useGetPationtByDepartmentIdQuery({ page });
+  const { data, isLoading, refetch } =
+    useGetPationtByDepartmentIdQuery({ page ,size:20});
   function computeTestCompletionRatio(patient: any) {
     let totalTests = 0;
     let completedTests = 0;
-    console.log(patient);
 
     // Count total tests
     for (const dept of patient.pendingTest) {
@@ -41,7 +40,7 @@ export default function PrintViews({ page }: { page: string }) {
   const columns: GridColDef[] = [
     { field: "name", headerName: "Name", width: 200 },
 
-    { field: "gender", headerName: "Gender", width: 130 }, 
+    { field: "gender", headerName: "Gender", width: 130 },
     { field: "age", headerName: "Age", width: 130 },
 
     {
@@ -86,10 +85,15 @@ export default function PrintViews({ page }: { page: string }) {
     });
   }
 
-  React.useEffect(() => {
-    // refetch();
-  }, []);
 
+  React.useEffect(() => {
+    const intervalId = setInterval(() => {
+      refetch();
+    }, 3000);  // Refresh every 3 seconds
+
+    // Clean up the interval when the component is unmounted
+    return () => clearInterval(intervalId);
+  }, [refetch]);
   return (
     <div className="mx-auto max-w-screen-xl px-4 py-2">
       <PdfDialog data={selectedPatioent} open={showPdf} handleOpen={setShowPdf} />

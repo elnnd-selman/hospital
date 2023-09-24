@@ -1,11 +1,10 @@
-import useLogin from "@/app/hooks/useLogin";
 import { useGetPationtByDepartmentIdQuery } from "@/app/redux/apis/patientApis";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/solid";
-import { Card, Typography, List, ListItem, IconButton } from "@material-tailwind/react";
-import { FaUserCircle } from 'react-icons/fa'
+import { IconButton, Typography } from "@material-tailwind/react";
 import moment from "moment";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { FaUserCircle } from 'react-icons/fa';
 export function ListOfPatients({
   page,
   handleSelectPatient,
@@ -18,22 +17,49 @@ export function ListOfPatients({
   const router = useRouter()
 
 
-  const { data, isLoading } = useGetPationtByDepartmentIdQuery({
+  const { data, isLoading, refetch, isError, error } = useGetPationtByDepartmentIdQuery({
     departmentId: user.permissions[0],
     page: page,
+    size: 5
   });
 
-  if (!isLoading) {
-    console.log(data);
+ 
 
-  }
   const [selectedPationtId, setSelectedPatientId] = useState("");
   const handleSelect = (patient: any) => {
     setSelectedPatientId(patient._id);
     handleSelectPatient(patient);
   };
 
+  function computeTestCompletionRatio(patient: any) {
+    let totalTests = 0;
+    let completedTests = 0;
 
+    // Count total tests
+    for (const dept of patient.pendingTest) {
+      totalTests += dept.tests.length;
+    }
+
+    // Count completed tests
+    for (const dept of patient.doneTest) {
+      completedTests += dept.tests.length;
+    }
+
+    return {
+      label: `${completedTests}/${totalTests}`,
+      done: completedTests,
+      pending: totalTests
+    };
+  }
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      refetch();
+    }, 3000);  // Refresh every 3 seconds
+
+    // Clean up the interval when the component is unmounted
+    return () => clearInterval(intervalId);
+  }, [refetch]);
   return (
     <div className=" h-[calc(100vh-4rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-100 flex flex-col justify-between overflow-y-auto">
       <div>
@@ -45,7 +71,9 @@ export function ListOfPatients({
         <div>
           {isLoading
             ? "Loading..."
-            : data.data.docs.map((patient: any) => {
+            : isError ? <h1>{JSON.stringify(error)}</h1> : data.data.docs.map((patient: any) => {
+              const computed = computeTestCompletionRatio(patient)
+
               return (
                 <div
                   key={patient._id}
@@ -61,6 +89,11 @@ export function ListOfPatients({
                   <div>{patient.name}</div>
                   <div className="text-[14px]">
                     {moment(patient.createdAt).format("DD-MM-YYYY : h:mm:ss a")}
+                    <div className="my-2">
+                      <span className={`rounded-lg p-2  ${computed.done == computed.pending ? 'bg-green-400 text-white min-[]:' : ""}`}>
+                        {computed.done}/{computed.pending}
+                      </span>
+                    </div>
                   </div>
                 </div>
               );

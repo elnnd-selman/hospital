@@ -30,6 +30,7 @@ function Create({ page }: { page: any }) {
     <div className="mx-auto max-w-screen-xl py-2  ">
       <div className="flex justify-start items-start flex-warp">
         {/* PATIENST */}
+
         {user && <ListOfPatients page={page} handleSelectPatient={handleSelectPatient} user={user} />
         }
 
@@ -37,15 +38,15 @@ function Create({ page }: { page: any }) {
         <AddResult selectedPatient={selectedPatient} setSelectedPatient={setSelectedPatient} user={user} />
         <Card className="h-[calc(100vh-4rem)] p-5 flex flex-col">
 
-          <Button onClick={() => {
-            // console.log(selectedPatient);
+          <Button disabled={(selectedPatient.name.length < 1 || selectedPatient.doneTest.length < 1)} onClick={() => {
             addResult({
               departmentId: user.permissions[0],
               patient: selectedPatient
             })
 
           }}>{isLoading ? "Submiting.." : 'Submit'}</Button>
-          <div className="flex-1 flex justify-center items-center">          <Image className="" src={FlwoerTestImage} width={100} alt="" />
+          <div className="flex-1 flex justify-center items-center">
+            <Image className="" src={FlwoerTestImage} width={100} alt="" />
           </div>
         </Card>
 

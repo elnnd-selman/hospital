@@ -160,7 +160,6 @@ function Test({
       ...prevState,
       doneTest: doneTestsCopy
     }));
-    console.log("REMOVING", selectedPatient);
   }
 
   return (
@@ -319,12 +318,10 @@ function SubTest({
     if (departmentFound) {
 
       let test = containId(departmentFound.tests, currentTest._id);
-      console.log(test);
 
       if (test) {
 
         let subTest = containId(test.subTests, currentSubTest._id);
-        console.log('SUBTEST', subTest);
         if (subTest) {
           subTest = { ...subTest, result }
           test = {
@@ -370,7 +367,6 @@ function SubTest({
       ...prevState,
       doneTest
     }))
-    console.log(selectedPatient);
 
   };
 
@@ -393,7 +389,6 @@ function SubTest({
       ...prevState,
       doneTest: doneTestsCopy
     }));
-    console.log("REMOVING", selectedPatient);
 
   };
   return (

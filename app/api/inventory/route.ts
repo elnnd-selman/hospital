@@ -14,12 +14,10 @@ export async function GET(req: NextRequest) {
   let options: any = {};
 
   if (departmentId != "undefined" && departmentId != "null" && departmentId) {
-    console.log("HERE", departmentId);
 
     // Ensure the 'pendingTest' object exists before setting its '_id' property
     options["pendingTest._id"] = departmentId;
   }
-  console.log(options);
 
   const genderCount = await PatientPatientModel.aggregate([
     {

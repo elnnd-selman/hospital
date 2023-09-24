@@ -147,7 +147,6 @@ export function CreateDepartmentDialog({
                                     setKeyInput("");
                                     setValueInput("");
                                     setDataToNull();
-                                    console.log(form.data);
 
                                     handleChange({
                                         target: {

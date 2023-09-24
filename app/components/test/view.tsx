@@ -86,9 +86,7 @@ export default function TestDataTable({ page }: { page: string }) {
             rows={rows}
             columns={columns}
             pagination
-            // onRowClick={(e) => {
-            //   console.log(e);
-            // }}
+         
             paginationMode="server"
             rowCount={data.data.totalDocs}
             onPaginationModelChange={(params) => {

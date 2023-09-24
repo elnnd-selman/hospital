@@ -1,3 +1,4 @@
+"use client"
 import { useCreateDepartmentMutation } from "@/app/redux/apis/departmentApis";
 import {
     Button,
@@ -8,9 +9,15 @@ import {
     Input,
     Typography
 } from "@material-tailwind/react";
-import { Document, Page, Text, View, StyleSheet, PDFViewer } from '@react-pdf/renderer';
+import { Document, Page, Text, View, StyleSheet, PDFViewer, Image, Font } from '@react-pdf/renderer';
 import moment from "moment";
 import { useState } from "react";
+import P1 from './../../assets/Picture1.png'
+import P2 from './../../assets/Picture2.png'
+import P3 from './../../assets/Picture3.png'
+
+import { StaticImageData } from "next/image";
+
 
 export function PdfDialog({
     open,
@@ -22,7 +29,6 @@ export function PdfDialog({
     data: any
 }) {
 
-    const [name, setName] = useState("");
     const [createDepartment, { isLoading }] = useCreateDepartmentMutation();
     return (
         <>
@@ -56,18 +62,42 @@ export function PdfDialog({
 const styles = StyleSheet.create({
     page: {
         padding: 30,
+
     },
     section: {
         margin: 10,
         padding: 10,
         flexGrow: 1,
     },
+    images: {
+        width: '100%',
+
+        flexDirection: "row",
+        justifyContent: "space-between", // if you want it to be row-direction
+        flexWrap: "nowrap",
+        alignContent: "center",
+        border: '1px solid black',
+        marginVertical: 10,
+        padding: 10,
+        borderRadius: 10
+
+    },
+    image: {
+        height: '50px',
+     
+    },
+    imageBarewbarayati: {
+        width: '200px',
+        marginLeft:20
+       
+
+    },
     patientInformation: {
         flexDirection: "row",
         justifyContent: "space-between", // if you want it to be row-direction
         flexWrap: "nowrap",
         border: '1px solid black',
-        margin: 10,
+        marginVertical: 10,
         padding: 10,
         borderRadius: 10
     },
@@ -83,7 +113,7 @@ const styles = StyleSheet.create({
 
     },
     patientInformationData: {
-        fontSize: 14,
+        fontSize: 12,
         marginLeft: 5
 
     },
@@ -99,17 +129,15 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     table: {
-        display: "table",
         width: "auto",
         borderStyle: "solid",
-        borderColor:"grey",
+        borderColor: "grey",
         borderWidth: 1,
         borderRightWidth: 0,
         borderBottomWidth: 0,
         borderRadius: 2
     },
     tableData: {
-        display: "table",
         width: "auto",
 
     },
@@ -129,7 +157,7 @@ const styles = StyleSheet.create({
     tableCol: {
         width: '100%',
         borderStyle: "solid",
-        borderColor:"grey",
+        borderColor: "grey",
         borderWidth: 1,
         borderLeftWidth: 0,
         borderTopWidth: 0,
@@ -139,7 +167,7 @@ const styles = StyleSheet.create({
     tableColTest: {
         width: '50%',
         borderStyle: "solid",
-        borderColor:"grey",
+        borderColor: "grey",
         borderWidth: 1,
         borderLeftWidth: 0,
         borderTopWidth: 0,
@@ -149,7 +177,7 @@ const styles = StyleSheet.create({
     tableColResult: {
         width: '70%',
         borderStyle: "solid",
-        borderColor:"grey",
+        borderColor: "grey",
         borderWidth: 1,
         borderLeftWidth: 0,
         borderTopWidth: 0,
@@ -187,6 +215,19 @@ const styles = StyleSheet.create({
 const MyDocument = ({ data }: { data: any }) => (
     <Document>
         <Page size="A4" style={styles.page}>
+            <View style={styles.images}>
+                <View >
+                    <Image style={styles.image} src={P2.src} />
+                </View>
+
+                <View >
+                    <Image style={styles.imageBarewbarayati} src={P3.src} />
+                </View>
+
+                <View >
+                    <Image style={styles.image} src={P1.src} />
+                </View>
+            </View>
             {/* PATIENT INFO */}
             <View style={styles.patientInformation}>
                 <Text style={styles.patientInformationData}>Name: {data.name}</Text>
@@ -259,7 +300,7 @@ const MyDocument = ({ data }: { data: any }) => (
                 </View>
             ))}
             <Text style={
-                { marginTop: 10, fontSize:12 }
+                { marginTop: 10, fontSize: 12 }
             }>
                 {moment().format("YYYY-MM-DD HH:mm")}
             </Text>

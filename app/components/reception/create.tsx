@@ -82,7 +82,6 @@ export function Create() {
       };
     });
     removeEmptyDepartments();
-    console.log(formData);
   };
 
   const removeEmptyDepartments = () => {
@@ -131,6 +130,8 @@ export function Create() {
                     .unwrap()
                     .then((e) => {
                       setOpenPreviewDialog(false);
+                      window.location.reload()
+
                     });
                 }}
               >

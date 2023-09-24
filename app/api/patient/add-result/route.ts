@@ -4,7 +4,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   const { patient } = await request.json();
-  console.log(patient.doneTest);
 
   try {
     // First, find the patient
