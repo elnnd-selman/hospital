@@ -19,7 +19,7 @@ const AddResult = ({
 }) => {
 
   return (
-    <div className="h-[calc(100vh-4rem)]  overflow-y-auto flex-1">
+    <div className="h-[100vh] overflow-y-auto flex-1">
       <div className="m-5">
         <h2 className="text-center text-xl font-bold text-[#00666c] sm:text-2xl lg:text-left lg:text-3xl">{selectedPatient.name}</h2>
         <p className="text-center text-gray-500 lg:text-left">

@@ -27,7 +27,7 @@ function Create({ page }: { page: any }) {
 
   ///RETURN
   return (
-    <div className="mx-auto max-w-screen-xl py-2  ">
+    <div className="mx-auto max-w-screen-xl py-2">
       <div className="flex justify-start items-start flex-warp">
         {/* PATIENST */}
 
@@ -36,7 +36,7 @@ function Create({ page }: { page: any }) {
 
         {/* TESTS */}
         <AddResult selectedPatient={selectedPatient} setSelectedPatient={setSelectedPatient} user={user} />
-        <Card className="h-[calc(100vh-4rem)] p-5 flex flex-col">
+        <Card className="h-screen p-5 flex flex-col">
 
           <Button disabled={(selectedPatient.name.length < 1 || selectedPatient.doneTest.length < 1)} onClick={() => {
             addResult({

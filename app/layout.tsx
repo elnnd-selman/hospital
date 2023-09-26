@@ -29,7 +29,7 @@ export default function RootLayout({
             <ToastContainer />
 
             <div>
-              <NavBar />
+              {/* <NavBar /> */}
               {children}
             </div>
           </Providers>

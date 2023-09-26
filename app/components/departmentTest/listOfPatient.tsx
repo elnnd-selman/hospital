@@ -23,7 +23,7 @@ export function ListOfPatients({
     size: 5
   });
 
- 
+
 
   const [selectedPationtId, setSelectedPatientId] = useState("");
   const handleSelect = (patient: any) => {
@@ -34,6 +34,8 @@ export function ListOfPatients({
   function computeTestCompletionRatio(patient: any) {
     let totalTests = 0;
     let completedTests = 0;
+    let completedDepartmentTest = 0;
+    let totalDepartmentTest = 0;
 
     // Count total tests
     for (const dept of patient.pendingTest) {
@@ -45,10 +47,23 @@ export function ListOfPatients({
       completedTests += dept.tests.length;
     }
 
+    for (const dept of patient.doneTest) {
+      if (dept._id == user.permissions[0]) {
+        completedDepartmentTest += dept.tests.length;
+      }
+    }
+
+    for (const dept of patient.pendingTest) {
+      if (dept._id == user.permissions[0]) {
+        totalDepartmentTest += dept.tests.length;
+      }
+    }
     return {
       label: `${completedTests}/${totalTests}`,
       done: completedTests,
-      pending: totalTests
+      pending: totalTests,
+      completedDepartmentTest,
+      totalDepartmentTest
     };
   }
 
@@ -61,7 +76,7 @@ export function ListOfPatients({
     return () => clearInterval(intervalId);
   }, [refetch]);
   return (
-    <div className=" h-[calc(100vh-4rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-100 flex flex-col justify-between overflow-y-auto">
+    <div className=" h-screen w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-100 flex flex-col justify-between overflow-y-auto">
       <div>
         <div className="mb-2 p-4">
           <Typography variant="h5" color="blue-gray" className="flex justify-start items-center gap-4">
@@ -79,7 +94,7 @@ export function ListOfPatients({
                   key={patient._id}
                   className={`flex-col justify-start items-start my-5 rounded-lg p-2 ${patient._id == selectedPationtId
                     ? "bg-[#00666c] text-white"
-                    : ""
+                    : "border"
                     }`}
                   color="blue"
                   onClick={() => {
@@ -89,10 +104,15 @@ export function ListOfPatients({
                   <div>{patient.name}</div>
                   <div className="text-[14px]">
                     {moment(patient.createdAt).format("DD-MM-YYYY : h:mm:ss a")}
-                    <div className="my-2">
-                      <span className={`rounded-lg p-2  ${computed.done == computed.pending ? 'bg-green-400 text-white min-[]:' : ""}`}>
-                        {computed.done}/{computed.pending}
-                      </span>
+                    <div className="my-2 flex">
+
+                      <div className={`rounded-lg p-2  ${computed.done == computed.pending ? 'bg-green-400 text-white ' : ""}`}>
+                        All  {computed.done}/{computed.pending}
+                      </div>
+
+                      <div className={`ml-4 rounded-lg p-2  ${computed.completedDepartmentTest == computed.totalDepartmentTest ? 'bg-green-400 text-white min-[]:' : "bg-red-400 text-white"}`}>
+                        Department  {computed.completedDepartmentTest}/{computed.totalDepartmentTest}
+                      </div>
                     </div>
                   </div>
                 </div>
