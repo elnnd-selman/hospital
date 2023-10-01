@@ -6,16 +6,16 @@ import * as React from "react";
 
 import { useGetPationtByDepartmentIdQuery } from "@/app/redux/apis/patientApis";
 import { useRouter } from "next/navigation";
-import { Button } from "@material-tailwind/react";
+import { Button, Input, Option, Select } from "@material-tailwind/react";
 import { PdfDialog } from "./pdfDialog";
-export default function PrintViews({ page }: { page: string }) {
+export default function PrintViews({ page, type, from, to }: { page: string, type: string, from: string, to: string }) {
 
   const [selectedPatioent, setSelectedPatient] = React.useState({})
   const [showPdf, setShowPdf] = React.useState(false)
 
   const router = useRouter();
   const { data, isLoading, refetch } =
-    useGetPationtByDepartmentIdQuery({ page ,size:20});
+    useGetPationtByDepartmentIdQuery({ page, size: 10, type ,from, to });
   function computeTestCompletionRatio(patient: any) {
     let totalTests = 0;
     let completedTests = 0;
@@ -46,8 +46,9 @@ export default function PrintViews({ page }: { page: string }) {
     {
       field: "date", headerName: "date", width: 200, renderCell: (params: any) => (
         <>
+    
           {
-            moment(params.date).format("DD-MM-YYYY : h:mm:ss a")
+            moment(params.row.createdAt).format("DD-MM-YYYY : h:mm:ss a")
           }
         </>
       )
@@ -102,16 +103,34 @@ export default function PrintViews({ page }: { page: string }) {
         <h1> Patient is Loading</h1>
       ) : (
         <div style={{ height: 400, width: "100%" }}>
+          <div className=" flex gap-5 my-5">
+            <Select label="Select Version" onChange={(v: any) => {
+              router.replace(`print?page=${page}&type=${v}&from=${from}&to=${to}`)
+
+            }}>
+              <Option value="all">All</Option>
+              <Option value="pending">Pending</Option>
+              <Option value="done">Done</Option>
+
+            </Select>
+            <Input variant="outlined" label="From" type="date" crossOrigin={""} onChange={(e) => {
+              router.replace(`/print?page=${page}&type=${type}&from=${e.target.value}&to=${to}`)
+            }} />
+            <Input variant="outlined" label="To" type="date" crossOrigin={""} onChange={(e) => {
+              router.replace(`/print?page=${page}&type=${type}&from=${from}&to=${e.target.value}`)
+            }} />
+
+          </div>
           <DataGrid
+            loading={isLoading}
             rows={rows}
             columns={columns}
             pagination
-
             paginationMode="server"
             rowCount={data.data.totalDocs}
             onPaginationModelChange={(params) => {
               const page = params.page + 1;
-              router.push("/print?page=" + page);
+              router.push(`print?page=${page}&type=${type}&from=${from}&to=${to}`);
             }}
             // onFilterModelChange={handleFilterChange}
             initialState={{

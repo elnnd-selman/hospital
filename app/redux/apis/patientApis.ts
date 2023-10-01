@@ -3,15 +3,15 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 // Define a service using a base URL and expected endpoints
 export const patientApi = createApi({
   reducerPath: "patientApi",
-  baseQuery: fetchBaseQuery({ baseUrl:  "http://localhost:3000/api" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000/api" }),
   endpoints: (builder) => ({
     getPationtByDepartmentId: builder.query({
-      query: ({ departmentId,page,size }) => `patient?departmentId=${departmentId}&page=${page}&size=${size}`,
+      query: ({ departmentId, page, size, type, from, to }) =>
+        `patient?departmentId=${departmentId}&page=${page}&size=${size}&type=${type}&from=${from}&to=${to}`,
     }),
 
     addPatient: builder.mutation({
       query: (data) => {
-      
         return {
           url: `patient`,
           method: "POST",
@@ -22,7 +22,6 @@ export const patientApi = createApi({
 
     addResultPatient: builder.mutation({
       query: (data) => {
-      
         return {
           url: `patient/add-result`,
           method: "POST",
@@ -30,8 +29,11 @@ export const patientApi = createApi({
         };
       },
     }),
-
   }),
 });
 
-export const { useAddPatientMutation ,useGetPationtByDepartmentIdQuery,useAddResultPatientMutation} = patientApi;
+export const {
+  useAddPatientMutation,
+  useGetPationtByDepartmentIdQuery,
+  useAddResultPatientMutation,
+} = patientApi;
